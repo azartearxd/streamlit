@@ -62,10 +62,10 @@ col1.metric("Total Alumnos", len(df_filtrado))
 col2.metric("Calificación Promedio", f"{df_filtrado['calificacion_promedio'].mean():.2f}")
 col3.metric("Asistencia Promedio", f"{df_filtrado['asistencia_promedio'].mean():.2f}%")
 
-# Calcular tasa de aprobación (considerando Bueno/Excelente como aprobados)
-aprobados = df_filtrado[df_filtrado['rendimiento'].isin(['Bueno', 'Excelente', 'Aprobado'])]
-tasa_aprobacion = (len(aprobados) / len(df_filtrado)) * 100 if len(df_filtrado) > 7 else 0
-col4.metric("Tasa de Aprobación", f"{tasa_aprobacion:.1f}%")
+# Calcular tasa de aprobación (solo alumnos con promedio >= 7)
+aprobados = df_filtrado[df_filtrado['calificacion_promedio'] >= 7]
+tasa_aprobacion = (len(aprobados) / len(df_filtrado)) * 100 if len(df_filtrado) > 0 else 0
+col4.metric("Tasa de Aprobación (≥7)", f"{tasa_aprobacion:.1f}%")
 
 # Gráficos en pestañas
 tab1, tab2, tab3, tab4 = st.tabs(["📈 Distribuciones", "📊 Comparativas", "🔍 Relaciones", "📅 Evolución"])
