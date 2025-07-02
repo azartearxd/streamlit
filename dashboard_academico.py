@@ -16,25 +16,23 @@ df = cargar_datos()
 st.title('📊 Dashboard de Rendimiento Académico')
 st.markdown('Este dashboard permite visualizar el rendimiento de los alumnos a partir de métricas calculadas.')
 
-# Filtros
+# Filtros múltiples
 col1, col2 = st.columns(2)
 with col1:
-    grupo = st.selectbox('Selecciona un grupo:', options=['Todos'] + sorted(df['grupo'].unique()))
+    grupos = st.multiselect('Selecciona uno o más grupos:', options=sorted(df['grupo'].unique()), default=sorted(df['grupo'].unique()))
 with col2:
-    semestre = st.selectbox('Selecciona un semestre:', options=['Todos'] + sorted(df['semestre'].unique()))
+    semestres = st.multiselect('Selecciona uno o más semestres:', options=sorted(df['semestre'].unique()), default=sorted(df['semestre'].unique()))
 
-# Aplicar filtros
-df_filtrado = df.copy()
-if grupo != 'Todos':
-    df_filtrado = df_filtrado[df_filtrado['grupo'] == grupo]
-if semestre != 'Todos':
-    df_filtrado = df_filtrado[df_filtrado['semestre'] == int(semestre)]
+# Aplicar filtros múltiples
+df_filtrado = df[df['grupo'].isin(grupos) & df['semestre'].isin(semestres)]
 
 # Métricas generales
 st.subheader('📌 Métricas Generales')
 col1, col2, col3 = st.columns(3)
 col1.metric("Promedio General", f"{df_filtrado['calificacion_promedio'].mean():.2f}")
 col2.metric("Asistencia Promedio", f"{df_filtrado['asistencia_promedio'].mean():.2f}%")
+
+# Nueva lógica: porcentaje de alumnos con promedio mayor o igual a 6
 total_alumnos = len(df_filtrado)
 alumnos_aprobados = len(df_filtrado[df_filtrado['calificacion_promedio'] >= 6])
 tasa_aprobacion = (alumnos_aprobados / total_alumnos * 100) if total_alumnos > 0 else 0
@@ -57,3 +55,4 @@ with col2:
 st.subheader('🎯 Categoría de Rendimiento')
 fig3 = px.pie(df_filtrado, names='rendimiento', title='Distribución por Categoría de Rendimiento')
 st.plotly_chart(fig3, use_container_width=True)
+
