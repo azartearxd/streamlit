@@ -64,7 +64,7 @@ col3.metric("Asistencia Promedio", f"{df_filtrado['asistencia_promedio'].mean():
 
 # Calcular tasa de aprobación (considerando Bueno/Excelente como aprobados)
 aprobados = df_filtrado[df_filtrado['rendimiento'].isin(['Bueno', 'Excelente', 'Aprobado'])]
-tasa_aprobacion = (len(aprobados) / len(df_filtrado)) * 100 if len(df_filtrado) > 0 else 0
+tasa_aprobacion = (len(aprobados) / len(df_filtrado)) * 100 if len(df_filtrado) > 7 else 0
 col4.metric("Tasa de Aprobación", f"{tasa_aprobacion:.1f}%")
 
 # Gráficos en pestañas
