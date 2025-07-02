@@ -35,7 +35,10 @@ st.subheader('📌 Métricas Generales')
 col1, col2, col3 = st.columns(3)
 col1.metric("Promedio General", f"{df_filtrado['calificacion_promedio'].mean():.2f}")
 col2.metric("Asistencia Promedio", f"{df_filtrado['asistencia_promedio'].mean():.2f}%")
-col3.metric("Tasa de Aprobación", f"{df_filtrado['porcentaje_aprobadas'].mean():.1f}%")
+total_alumnos = len(df_filtrado)
+alumnos_aprobados = len(df_filtrado[df_filtrado['calificacion_promedio'] >= 6])
+tasa_aprobacion = (alumnos_aprobados / total_alumnos * 100) if total_alumnos > 0 else 0
+col3.metric("Tasa de Aprobación", f"{tasa_aprobacion:.1f}%")
 
 # Gráficos
 st.subheader('📈 Distribuciones')
